@@ -38,46 +38,44 @@ int main(int argc, char *argv[])
 
     drawG.drawXY(t,x);
 */
-//     float step = 0.1;
-//     float time=0;
-
-//     vector<float> state(1);
-//     state(0) = 0;
-
-////     FormingFilter ff;
-////     ff.setInitializeParametrs(time, state);
-////     ff.setIntegrationMethod(step, 1);
-////     ff.setParametrsDistributionFormingFilter(0, 10);
-////     ff.setParametrsForWhiteNoise(step, time);
-//     WhiteNoiseGenerator WN(0,0);
 
 
-//     std::vector<float> t(0);
-//     std::vector<float> x(0);
+/*
+     float step = 10;
+     float time=0;
+
+     vector<float> state(1);
+     state(0) = 0;
+
+     FormingFilter ff;
+     ff.setInitializeParametrs(time, state);
+     ff.setIntegrationMethod(step, 1);
+     ff.setParametrsDistributionFormingFilter(0, 10);
+     ff.setParametrsForWhiteNoise(step, time);
+     WhiteNoiseGenerator WN(0);
+     std::vector<float> t(0);
+     std::vector<float> x(0);
+
+     while (time<500)
+     {
+        state = ff.getNextState();
+        t.push_back(time);
+        x.push_back(state(0));
+        time+=step;
+     };
 
 
-//     while (time<500)
-//     {
-//            //state = ff.getNextState();
-//            t.push_back(time);
-//            x.push_back(WN.getNoise());//state(0));
-
-//            //std::cout<<time<<std::endl;
-
-//        time+=step;
-
-//     };
-
-
-//     DrawGraphic drawG;
-
-//     drawG.drawXY(t,x);
+     DrawGraphic drawG;
+     drawG.drawXY(t,x);
+*/
 
 
 
-    /*Consumer* consumer;
+/*
+    Consumer* consumer;
     consumer = new Consumer();
 
+    float step = 1;
     vector<float> state0(6), state(6);
     state0(0) = 6871;
     state0(1) = 0;
@@ -87,12 +85,29 @@ int main(int argc, char *argv[])
     state0(5) = 6.5;
 
     consumer->setInitializeParametrs(0,state0);
-    consumer->setIntegrationMethod(1, 1);
-    state = consumer->getNextState();*/
+    consumer->setIntegrationMethod(step, 1);
+    state = consumer->getNextState();
 
-    //std::cout<< state;
+    std::vector<float> t(0);
+    std::vector<float> x(0);
+    std::vector<float> y(0);
+    std::vector<float> z(0);
 
+    float time = 0;
 
+    while (time<6000)
+    {
+        t.push_back(time);
+        state = consumer->getNextState();
+        x.push_back(state(0));
+        y.push_back(state(1));
+        z.push_back(state(2));
+        time+=step;
+    };
+
+    DrawGraphic drawG;
+    drawG.drawXYZ(x, y, z);
+*/
 
 
     return a.exec();

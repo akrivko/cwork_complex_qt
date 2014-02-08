@@ -144,7 +144,7 @@ public:
     };
 
     void computeNextReferenceState(){
-        _referenceState = _integrationReference->computeState(_time, _referenceState);
+        _referenceState = _referenceState + _deltaStateEstimateFK;//_integrationReference->computeState(_time, _referenceState);
         //_time += _integration->getStep();	 исправить, т.к. время уже суммируется в истинной траектории
     };
 
@@ -219,9 +219,9 @@ public:
 
             radius = sqrt((xSat-xCon)*(xSat-xCon)+(ySat-yCon)*(ySat-yCon)+(zSat-zCon)*(zSat-zCon));
 
-            H(i,0) = -((xSat-xCon)/radius);
-            H(i,1) = -((ySat-yCon)/radius);
-            H(i,2) = -((zSat-zCon)/radius);
+            H(i,0) = -(xSat-xCon)/radius;
+            H(i,1) = -(ySat-yCon)/radius;
+            H(i,2) = -(zSat-zCon)/radius;
             H(i,3) = 0;
             H(i,4) = 0;
             H(i,5) = 0;
@@ -229,9 +229,9 @@ public:
             H(i+numSat,0) = 0;
             H(i+numSat,1) = 0;
             H(i+numSat,2) = 0;
-            H(i+numSat,3) = (xSat-xCon)/radius;
-            H(i+numSat,4) = (ySat-yCon)/radius;
-            H(i+numSat,5) = (zSat-zCon)/radius;
+            H(i+numSat,3) = -(xSat-xCon)/radius;
+            H(i+numSat,4) = -(ySat-yCon)/radius;
+            H(i+numSat,5) = -(zSat-zCon)/radius;
 
         }
 
@@ -252,7 +252,7 @@ public:
             D(i,i) = pow(0.3/1000.0, 2);
         }
 
-        _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(deltaX,//_deltaStateEstimateFK,//
+        _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(_deltaStateEstimateFK,//deltaX,//
                                                 deltaY, F,
                                                 H, D);
     };

@@ -79,7 +79,7 @@ public:
 	vector<float> rightPart(float time_, vector<float> state_){
 		vector<float> resultVector(1);
 		
-        resultVector(0) = -1.0*_mu*state_(0) + pow(2*_sigma*_sigma,0.5)*_whiteNoise->getNoise();
+        resultVector(0) = -1.0*_mu*state_(0) + pow(2*_sigma*_sigma,0.5)*_whiteNoise->getNoise()/1000;
 		
 		return resultVector;
 	};

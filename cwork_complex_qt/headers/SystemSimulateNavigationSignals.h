@@ -76,13 +76,13 @@ public:
         vector<float> deltaVxVyVzConsumerSatellite(3);
 
         for (int i = 0; i < 3; ++i){
-            deltaVxVyVzConsumerSatellite(i) = fabs(stateConsumer_(i+3)-stateSatellite_(i+3));
+            deltaVxVyVzConsumerSatellite(i) = (stateConsumer_(i+3)-stateSatellite_(i+3));
         };
 
         vector<float> unitVectorForDistance(3);
-        unitVectorForDistance(0) = fabs(stateSatellite_(0) - stateConsumer_(0));
-        unitVectorForDistance(1) = fabs(stateSatellite_(1) - stateConsumer_(1));
-        unitVectorForDistance(2) = fabs(stateSatellite_(2) - stateConsumer_(2));
+        unitVectorForDistance(0) = (stateSatellite_(0) - stateConsumer_(0));
+        unitVectorForDistance(1) = (stateSatellite_(1) - stateConsumer_(1));
+        unitVectorForDistance(2) = (stateSatellite_(2) - stateConsumer_(2));
 
         float distance = computeDistance(time_, stateConsumer_, stateSatellite_);
         unitVectorForDistance = 1.0/distance * unitVectorForDistance;
