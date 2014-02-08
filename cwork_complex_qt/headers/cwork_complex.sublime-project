@@ -1,0 +1,41 @@
+{
+	"build_systems":
+	[
+		{
+			"cmd":
+			[
+				"g++",
+				"-I",
+				"C:\\Users\\artem\\Documents\\GitHub\\cwork_complex",
+				"${file}",
+				"-static-libstdc++",
+				"-o",
+				"${file_path}/${file_base_name}"
+			],
+			"file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
+			"name": "c++_for_boost",
+			"selector": "source.c++",
+			"shell": true,
+			"working_dir": "${file_path}"
+		}
+	],
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "C:\\Users\\artem\\Documents\\GitHub\\cwork_complex_qt"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "C:\\Users\\artem\\Documents\\GitHub\\cwork_complex_qt\\classes"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "C:\\Users\\artem\\Documents\\GitHub\\cwork_complex_qt\\headers"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "C:\\Users\\artem\\Documents\\GitHub\\cwork_complex_qt\\src"
+		}
+	]
+}

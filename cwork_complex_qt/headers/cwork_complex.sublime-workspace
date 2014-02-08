@@ -1,0 +1,746 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sta",
+				"statesSatellites"
+			],
+			[
+				"numbe",
+				"numbersOfVisibleSatellites"
+			],
+			[
+				"ste",
+				"_step"
+			],
+			[
+				"xA",
+				"xAbs1"
+			],
+			[
+				"radiu",
+				"radiusConsumer"
+			],
+			[
+				"ra",
+				"radiusEarth"
+			],
+			[
+				"radi",
+				"radiusConsumerSatellite"
+			],
+			[
+				"xyz",
+				"xyzConsumer"
+			],
+			[
+				"xy",
+				"xyzConsumer"
+			],
+			[
+				"con",
+				"constellation"
+			],
+			[
+				"state",
+				"stateConsumer"
+			],
+			[
+				"sigma",
+				"sigmaChrIon"
+			],
+			[
+				"mu",
+				"muChrIon"
+			],
+			[
+				"coun",
+				"_countSatellites"
+			],
+			[
+				"pat",
+				"pathToFIle1_"
+			],
+			[
+				"path",
+				"pathToFIle2_"
+			],
+			[
+				"sy",
+				"SystemSimulation"
+			],
+			[
+				"systemsim",
+				"SystemSimulateNavigationSignals"
+			],
+			[
+				"Sys",
+				"SystemSimulateNavigationSignals"
+			],
+			[
+				"del",
+				"deltaChronIon"
+			],
+			[
+				"su",
+				"SistemSimulateNavigationSignals"
+			],
+			[
+				"setPara",
+				"setParametrsForWhiteNoiseGenerator"
+			],
+			[
+				"beg",
+				"beginTime"
+			],
+			[
+				"curr",
+				"_currentValue"
+			],
+			[
+				"_cu",
+				"_currentTime"
+			],
+			[
+				"_curr",
+				"_currentValue"
+			],
+			[
+				"current",
+				"_currentTime"
+			],
+			[
+				"mi",
+				"min1"
+			],
+			[
+				"comp",
+				"computeNewStateSatellits"
+			],
+			[
+				"count",
+				"_countSatellites"
+			],
+			[
+				"compute",
+				"computeNextState"
+			],
+			[
+				"sa",
+				"_satellites"
+			],
+			[
+				"co",
+				"_countSatellites"
+			],
+			[
+				"_",
+				"_countSatelllites"
+			],
+			[
+				"gps",
+				"gpsSatellitesCoordinates"
+			],
+			[
+				"time",
+				"timeAdd"
+			],
+			[
+				"draw",
+				"drawXY"
+			],
+			[
+				"tur",
+				"_trueState"
+			],
+			[
+				"inte",
+				"IntegrationMethod"
+			],
+			[
+				"integrato",
+				"_integration"
+			],
+			[
+				"rig",
+				"_rightPart"
+			],
+			[
+				"get",
+				"get_state"
+			],
+			[
+				"na",
+				"namespace"
+			],
+			[
+				"li",
+				"lines_list"
+			],
+			[
+				"KF",
+				"KF_max"
+			],
+			[
+				"Ve",
+				"Vector2"
+			],
+			[
+				"result",
+				"result_vector"
+			],
+			[
+				"se",
+				"SetElement"
+			],
+			[
+				"vector",
+				"vector_type"
+			],
+			[
+				"Left",
+				"LEFT"
+			],
+			[
+				"ran",
+				"randrange"
+			],
+			[
+				"ball",
+				"ball_vel"
+			],
+			[
+				"ba",
+				"BALL_RADIUS"
+			],
+			[
+				"PA",
+				"PAD_HEIGHT"
+			],
+			[
+				"paddle",
+				"paddle1_pos"
+			],
+			[
+				"pa",
+				"paddle1_pos"
+			],
+			[
+				"DOWN",
+				"DOWN_S"
+			],
+			[
+				"ball_",
+				"ball_vel"
+			],
+			[
+				"count_",
+				"count_win"
+			],
+			[
+				"timer_",
+				"timer_off"
+			],
+			[
+				"number",
+				"number_to_name"
+			],
+			[
+				"name",
+				"name_to_number"
+			],
+			[
+				"all",
+				"all_numbers	(global, instance)"
+			],
+			[
+				"eqleft",
+				"eqleft	erb"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"ssla",
+				"Set Syntax: LaTeX"
+			],
+			[
+				"re",
+				"Package Control: Remove Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"insl",
+				"Package Control: Install Package"
+			],
+			[
+				"inspa",
+				"Package Control: Install Package"
+			],
+			[
+				"pyt",
+				"Set Syntax: Python"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"inpa",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"ss late",
+				"Set Syntax: LaTeX"
+			],
+			[
+				"sslate",
+				"Set Syntax: LaTeX"
+			],
+			[
+				"ssc++",
+				"Set Syntax: C++"
+			],
+			[
+				"sspyt",
+				"Set Syntax: Python"
+			],
+			[
+				"matla",
+				"Set Syntax: MATLAB"
+			],
+			[
+				"sslat",
+				"Set Syntax: LaTeX"
+			],
+			[
+				"ssmab",
+				"Set Syntax: MATLAB"
+			],
+			[
+				"ssmb",
+				"Set Syntax: MATLAB"
+			],
+			[
+				"ss pyt",
+				"Set Syntax: Python"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"set bu",
+				"Set Syntax: NAnt Build File"
+			],
+			[
+				"ss c++",
+				"Set Syntax: C++"
+			],
+			[
+				"ss mab",
+				"Set Syntax: MATLAB"
+			],
+			[
+				"ss ma",
+				"Set Syntax: MATLAB"
+			],
+			[
+				"ss matl",
+				"Set Syntax: MATLAB"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Remove Package"
+			],
+			[
+				"ss la",
+				"Set Syntax: LaTeX"
+			],
+			[
+				"ss lat",
+				"Set Syntax: LaTeX"
+			],
+			[
+				"ss l",
+				"Set Syntax: LaTeX"
+			],
+			[
+				"Package Control: install",
+				"Package Control: Install Package"
+			],
+			[
+				"snippet eq",
+				"Snippet: equation_left"
+			],
+			[
+				"Snippet: eql",
+				"Snippet: equation_left"
+			],
+			[
+				"Install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 181.0,
+		"history":
+		[
+			"cmd",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/artem/Documents/GitHub/cwork_complex_qt/cwork_complex_qt/headers/cwork_complex.sublime-project",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/cwork_complex.cpp",
+		"/C/Users/artem/Documents/GitHub/cwork_complex_qt/cwork_complex_qt/headers/Constellation.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex_qt/cwork_complex_qt/headers/WhiteNoiseGenerator.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex_qt/cwork_complex_qt/headers/RightPart.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex_qt/cwork_complex_qt/headers/SystemSimulateNavigationSignals.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex_qt/cwork_complex_qt/headers/Model.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex_qt/cwork_complex_qt/headers/SystemSimulation.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/DrawGraphics.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/cwork_complex.sublime-project",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/SystemSimulation.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/RightPart.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/SystemSimulateNavigationSignals.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/Constellation.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/Model.h",
+		"/D/Drive/Термех/12 вариант/12/программа/Unit1.pas",
+		"/D/Drive/Термех/12 вариант/12/matlab/var12.m",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/temp",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/IntegrationMethod.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/WhiteNoiseGenerator.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/source/gnuplot_i.hpp",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/gnuplotia01568",
+		"/C/Users/artem/AppData/Roaming/Sublime Text 3/Packages/User/my_c++.sublime-build",
+		"/D/Drive/Учеба флешка/ЛР 2 семестр/3 ЛР/WhiteNoiseGenerator.pas",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_15.11.tex",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_8.11.tex",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_....tex",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_29.11.tex",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_22.11.tex",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_6.12.tex",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_3.tex",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_2.tex",
+		"/C/Users/artem/Documents/GitHub/lections_complexing/paragraph/lection_1.11.tex",
+		"/C/Users/artem/Downloads/NRT-0.sp3",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/ephes",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/ephes_glonass_2.txt",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/ephes_glonass_1.txt",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/ephes_gps_2.txt",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/ephes_gps_1.txt",
+		"/C/Users/artem/Documents/GitHub/c++/template_try.cpp",
+		"/C/Users/artem/Documents/GitHub/cmodel.h",
+		"/C/Users/artem/Documents/GitHub/csquare_root.h",
+		"/C/Users/artem/Documents/GitHub/type.h",
+		"/C/Users/artem/Documents/GitHub/simple_main.cpp",
+		"/C/Users/artem/Documents/GitHub/example_gnuplot.c",
+		"/C/Users/artem/Documents/GitHub/func_type.cpp",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/vector_matrix.h",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_10.12.13.tex",
+		"/C/Users/artem/Documents/GitHub/virtual_func.c",
+		"/D/Drive/Термех/Delphi project/Журавлев/project_9/main_unit.pas",
+		"/C/Users/artem/AppData/Local/Temp/Rar$DRa0.127/C++/C++.sublime-build",
+		"/C/Users/artem/AppData/Roaming/Sublime Text 3/Packages/LaTeXTools/LaTeX.sublime-build",
+		"/C/Programming/opencv/opencv/samples/cpp/drawing.cpp",
+		"/C/Programming/opencv/opencv/CMakeLists.txt",
+		"/C/Programming/opencv/opencv/README",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/source/ex.c",
+		"/C/Programming/opencv/opencv/samples/cpp/kalman.cpp",
+		"/C/Program Files/Sublime Text 3/Packages/C++.sublime-package",
+		"/E/cwork_tracking/test_KF.m",
+		"/C/Users/artem/Documents/GitHub/lections_optimization/paragraph/lection_6.12.tex",
+		"/C/exgnuplot/gnuplot-cpp/ex2.c",
+		"/D/Drive/Programming/ЛР 2 семестр/2 ЛР/AbstractModel.pas",
+		"/D/Drive/Programming/ЛР 2 семестр/2 ЛР/Model.pas",
+		"/D/Drive/Термех/5 вариант/12/matlab/12matlab.txt",
+		"/C/Users/artem/Documents/GitHub/lections_management/title_page.tex",
+		"/D/Drive/Учеба/шаблон.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_26.11.13.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_19.11.13.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_12.11.13.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_9.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_8.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_7.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_5.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_3.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_2.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/paragraph/lection_1.tex",
+		"/C/Users/artem/Documents/GitHub/lections_management/lection.tex",
+		"/C/Users/artem/Documents/GitHub/lections_equipment_la/lections/paragraph/6.12.tex",
+		"/D/Drive/Programming/ЛР 2 семестр/2 ЛР/Integration.pas",
+		"/C/Users/artem/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/artem/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/vector-matrix.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/drawGraphics.h",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/headers/model.h",
+		"/C/exgnuplot/gnuplot-cpp/example.cc",
+		"/C/exgnuplot/gnuplot-cpp/gnuplot_i.hpp",
+		"/C/Users/artem/Documents/GitHub/learn_python/video_writer_test.py",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/classes/drawGraphics.c",
+		"/D/Drive/Термех/11 вариант/12/Программа/Project1.dpr",
+		"/D/Drive/Термех/9 вариант/7-12 задания/12/программа/Unit1.pas",
+		"/D/Drive/Термех/3 вариант/7-12 задания/12/matlab/var3.m",
+		"/C/Programming/Boost/boost/config.hpp",
+		"/C/Programming/Boost/example_gnuplot.c",
+		"/C/Programming/Boost/boost/example_gnuplot.c",
+		"/C/Users/artem/AppData/Roaming/Sublime Text 3/Packages/User/LaTeXTools Preferences.sublime-settings",
+		"/C/Users/artem/AppData/Roaming/Sublime Text 3/Packages/LaTeXTools/LaTeXTools Preferences.sublime-settings",
+		"/C/Users/artem/Documents/GitHub/lections_optimization/paragraph/lection_29.11.tex",
+		"/C/Users/artem/Documents/GitHub/Vector-Matrix/myvector.h",
+		"/C/Programming/Boost/boost/tuple/tuple.hpp",
+		"/D/Drive/Учеба флешка/ЛР 2 семестр/Генератор белого шума/CreateFileWN.dproj",
+		"/D/Drive/Учеба флешка/ЛР 2 семестр/Генератор белого шума/CreateFileWN.dpr",
+		"/D/Drive/Учеба флешка/ЛР 2 семестр/3 ЛР/StatisticsOfModel.pas",
+		"/C/Users/artem/Documents/GitHub/lections_automatica/paragraph/lection_1.tex",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/ConsoleApplication1/ConsoleApplication1/try_eiler.cpp",
+		"/C/Users/artem/Documents/GitHub/cwork_complex/cwork_complexing_fk/cwork_complexing_fk/cwork_complexing_fk.cpp",
+		"/C/Users/artem/Documents/GitHub/Vector-Matrix/test.cpp",
+		"/C/Users/artem/Documents/GitHub/learn_python/temp.py",
+		"/C/Users/artem/Documents/GitHub/cwork_tracking/test_KF.m",
+		"/C/Users/artem/Documents/GitHub/learn_python/lucas.py",
+		"/C/Users/artem/Documents/GitHub/lections_optimization/paragraph/lection_22.11.tex",
+		"/C/Users/artem/Documents/GitHub/lections_equipment_la/lections/paragraph/22.11.tex",
+		"/C/Users/artem/Documents/GitHub/learn_python/detect_face.py",
+		"/C/Programming/opencv/opencv/samples/python/numpy_array.py",
+		"/C/Programming/opencv/opencv/samples/python/drawing.py",
+		"/C/Programming/opencv/opencv/samples/python/chessboard.py",
+		"/C/Programming/opencv/opencv/samples/python/camshift.py",
+		"/C/Programming/opencv/opencv/samples/python/peopledetect.py",
+		"/C/Programming/opencv/opencv/samples/python/kalman.py",
+		"/C/Programming/opencv/opencv/samples/python/inpaint.py",
+		"/C/Programming/opencv/opencv/doc/user_guide/ug_mat.rst",
+		"/C/Programming/opencv/opencv/include/opencv/cvwimage.h",
+		"/C/Programming/opencv/opencv/samples/python/contours.py",
+		"/C/Programming/opencv/opencv/modules/python/src2/cv.py",
+		"/C/Users/artem/Documents/GitHub/learn_python/testocv.py",
+		"/C/Programming/Octave/mlcourse/ex2/costFunctionReg.m",
+		"/C/Programming/Octave/mlcourse/ex2/predict.m",
+		"/C/Programming/Octave/mlcourse/ex2/sigmoid.m",
+		"/C/Programming/Octave/mlcourse/ex2/ex2.m"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"consumer",
+			"systemSimulateNavigationSignals",
+			"add",
+			"color",
+			"Sistem",
+			"->",
+			"formingFilter",
+			"ce.",
+			"stateSatellite",
+			"stateConsumer",
+			"cmdstr",
+			"plotfile_xy",
+			"xy",
+			".",
+			"consumer",
+			"plotfile_xyz",
+			"xyz",
+			"///\n",
+			"iSs",
+			" opencv",
+			"245",
+			"teta",
+			"subsub",
+			"ruler",
+			"plot_xy",
+			"set_smoo",
+			"save",
+			"sava",
+			"]",
+			"[",
+			"cv2",
+			"x",
+			"\n",
+			"ограни",
+			"динамиче",
+			"схеме",
+			"\\begin{itemize}",
+			"\"",
+			"1_",
+			"\\begin{itemize}",
+			"subsubsection",
+			"images",
+			"\\begin{itemize}",
+			"\\begin{itemize} ",
+			"+e",
+			"section",
+			"subsection"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"_consumer",
+			"_systemSimulateNavigationSignals",
+			"System",
+			".",
+			"_formingFilter",
+			"ce->",
+			"stateSatellite_",
+			"stateConsumer_",
+			"",
+			",",
+			"satellite",
+			"iS",
+			" -lopencv",
+			"-lopencv",
+			"246",
+			"ksi",
+			")",
+			"(",
+			"cv",
+			"X",
+			"\\begin{itemize} \\compact",
+			"<<",
+			"2_",
+			"\\begin{itemize} \\compact",
+			"subsection",
+			"image_for_report",
+			"\\begin{itemize} \\compact"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.exec":
+	{
+		"height": 222.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "cwork_complex.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 242.0,
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 201.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
