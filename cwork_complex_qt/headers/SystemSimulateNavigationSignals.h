@@ -12,36 +12,38 @@ public:
     SystemSimulateNavigationSignals(){
         _formingFilterForDistance = new FormingFilter;
         _formingFilterForDerivativeDistance = new FormingFilter;
-    };
+    }
 
 
-    void setParametrs(float time_, float step_){
-        vector<float> state(1);
-        state(0) = 0;
+    void setParametrs(double time_, double step_){
+        vector<double> state(1);
 
-        float mu1 = 0/1000.0;
-        float sigma1 = 15/1000.0;
-        float mu2 = 0/1000.0;
-        float sigma2 = 0.1/1000.0;
+
+        double mu1 = 0.0;
+        double sigma1 = 15.0;
+        double mu2 = 0.0;
+        double sigma2 = 0.1;
 
         _whiteNoiseForDistance = new WhiteNoiseGenerator(0);
         _whiteNoiseForDerivativeDistance = new WhiteNoiseGenerator(0);
 
+        state(0) = _whiteNoiseForDistance->getNoise();
+
         _formingFilterForDistance->setInitializeParametrs(time_, state);
-        _formingFilterForDistance->setIntegrationMethod(step_, 1);
+        _formingFilterForDistance->setIntegrationMethod(step_, 2);
         _formingFilterForDistance->setParametrsDistributionFormingFilter(mu1, sigma1);
         _formingFilterForDistance->setParametrsForWhiteNoise(step_, time_);
 
         _formingFilterForDerivativeDistance->setInitializeParametrs(time_, state);
-        _formingFilterForDerivativeDistance->setIntegrationMethod(step_, 1);
+        _formingFilterForDerivativeDistance->setIntegrationMethod(step_, 2);
         _formingFilterForDerivativeDistance->setParametrsDistributionFormingFilter(mu2, sigma2);
         _formingFilterForDerivativeDistance->setParametrsForWhiteNoise(step_, time_);
     };
 
 
-    float computeDistance(float time_, vector<float> stateConsumer_, vector<float> stateSatellite_){
-        float distance;
-        vector<float> deltaXYZConsumerSatellite(3);
+    double computeDistance(double time_, vector<double> stateConsumer_, vector<double> stateSatellite_){
+        double distance;
+        vector<double> deltaXYZConsumerSatellite(3);
 
         for (int i = 0; i < 3; ++i){
             deltaXYZConsumerSatellite(i) = stateConsumer_(i)-stateSatellite_(i);
@@ -52,39 +54,39 @@ public:
         return distance;
     }
 
-    float computeReferenceDistance(float time_, vector<float> stateReferenceConsumer_, vector<float> stateReferenceSatellite_){
+    double computeReferenceDistance(double time_, vector<double> stateReferenceConsumer_, vector<double> stateReferenceSatellite_){
         return computeDistance(time_, stateReferenceConsumer_, stateReferenceSatellite_);
     }
 
 
-    float computeTrueDistance(float time_, vector<float> stateConsumer_, vector<float> stateSatellite_){
-        float distance = 0;
-        float muChrIon = 0; float sigmaChrIon = 10/1000.0;
-        float deltaChrIon = muChrIon + sigmaChrIon*(-0.7);//_whiteNoiseForDistance->getNoise();
-        float eta = vector<float>(_formingFilterForDistance->getNextState())(0);
+    double computeTrueDistance(double time_, vector<double> stateConsumer_, vector<double> stateSatellite_){
+        double distance;
+        double sigmaChrIon = 10.0;
+        double deltaChrIon = sigmaChrIon*_whiteNoiseForDistance->getNoise();
+        double eta = vector<double>(_formingFilterForDistance->getNextState())(0);
 
-        distance += computeDistance(time_, stateConsumer_, stateSatellite_);
+        distance = computeDistance(time_, stateConsumer_, stateSatellite_);
         distance += eta + deltaChrIon;
 
         return distance;
     }
 
 
-    float computeDerivativeDistance(float time_, vector<float> stateConsumer_, vector<float> stateSatellite_){
-        float derivativeDistance = 0;
+    double computeDerivativeDistance(double time_, vector<double> stateConsumer_, vector<double> stateSatellite_){
+        double derivativeDistance = 0;
 
-        vector<float> deltaVxVyVzConsumerSatellite(3);
+        vector<double> deltaVxVyVzConsumerSatellite(3);
 
         for (int i = 0; i < 3; ++i){
-            deltaVxVyVzConsumerSatellite(i) = (stateConsumer_(i+3)-stateSatellite_(i+3));
+            deltaVxVyVzConsumerSatellite(i) = (stateSatellite_(i+3)-stateConsumer_(i+3));
         };
 
-        vector<float> unitVectorForDistance(3);
+        vector<double> unitVectorForDistance(3);
         unitVectorForDistance(0) = (stateSatellite_(0) - stateConsumer_(0));
         unitVectorForDistance(1) = (stateSatellite_(1) - stateConsumer_(1));
         unitVectorForDistance(2) = (stateSatellite_(2) - stateConsumer_(2));
 
-        float distance = computeDistance(time_, stateConsumer_, stateSatellite_);
+        double distance = computeDistance(time_, stateConsumer_, stateSatellite_);
         unitVectorForDistance = 1.0/distance * unitVectorForDistance;
 
         derivativeDistance = inner_prod(deltaVxVyVzConsumerSatellite, unitVectorForDistance);
@@ -93,20 +95,20 @@ public:
     }
 
 
-    float computeReferenceDerivativeDistance(float time_, vector<float> stateReferenceConsumer_, vector<float> stateReferenceSatellite_){
+    double computeReferenceDerivativeDistance(double time_, vector<double> stateReferenceConsumer_, vector<double> stateReferenceSatellite_){
         return computeDerivativeDistance(time_, stateReferenceConsumer_, stateReferenceSatellite_);
     }
 
 
-    float computeTrueDerivativeDistance(float time_, vector<float> stateConsumer_, vector<float> stateSatellite_){
-        float derivativeDistance = 0;
+    double computeTrueDerivativeDistance(double time_, vector<double> stateConsumer_, vector<double> stateSatellite_){
+        double derivativeDistance;
 
-        float muSys = 0; float sigmaSys =0.3/1000.0;
-        float deltaSys = muSys + sigmaSys*0.2;//_whiteNoiseForDerivativeDistance->getNoise();
-        float eta = vector<float>(_formingFilterForDerivativeDistance->getNextState())(0);
+        double sigmaSys =0.3;
+        double deltaSys = sigmaSys*_whiteNoiseForDerivativeDistance->getNoise();//0.2;//
+        double eta = vector<double>(_formingFilterForDerivativeDistance->getNextState())(0);
 
-        derivativeDistance += computeDerivativeDistance(time_, stateConsumer_, stateSatellite_);
-        derivativeDistance += eta + deltaSys;
+        derivativeDistance = computeDerivativeDistance(time_, stateConsumer_, stateSatellite_);
+        //derivativeDistance += eta + deltaSys;
 
         return derivativeDistance;
     }

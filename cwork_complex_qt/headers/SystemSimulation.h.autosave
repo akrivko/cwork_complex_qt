@@ -117,195 +117,157 @@ public:
 
     void simulate(){
         double time = _beginTime;
-        std::vector<int> numbersOfVisibleSatellites;
+        std::vector<int> numbersOfVisibleSatellitesGps;
+        std::vector<int> numbersOfVisibleSatellitesGlonass;
+        int numGps = 8, numGlonass = 8;
         std::vector<double> deltaPseudoDistance;
         std::vector<double> deltaDerivativePseudoDistance;
-        std::vector< vector<double> > statesSatellites (0, vector<double>(6));
-
-        std::vector<double> t(0);
-        std::vector<double> x(0);
-        std::vector<double> y(0);
-        std::vector<double> z(0);
-
+        std::vector< vector<double> > statesSatellites (0, vector<double>(6+2*8));
+        
+        std::vector<double> t(0);       
+        
         std::vector<double> xr(0);
         std::vector<double> yr(0);
         std::vector<double> zr(0);
-
         std::vector<double> vxr(0);
         std::vector<double> vyr(0);
         std::vector<double> vzr(0);
-
         std::vector<double> xlim(0);
         std::vector<double> ylim(0);
         std::vector<double> zlim(0);
-
         std::vector<double> vxlim(0);
         std::vector<double> vylim(0);
         std::vector<double> vzlim(0);
-
         std::vector<double> xlim2(0);
         std::vector<double> ylim2(0);
         std::vector<double> zlim2(0);
-
         std::vector<double> vxlim2(0);
         std::vector<double> vylim2(0);
         std::vector<double> vzlim2(0);
-
-        vector<double> referenceStateConsumer(6);
-        vector<double> StateConsumer(6);
-        vector<double> deltaStateFK(6);
-
-        matrix<double> estP(6,6);
-        int temp =0 ;
-
+        
+        vector<double> referenceStateConsumer(6+2*8);
+        vector<double> StateConsumer(6+2*8);
+        vector<double> deltaStateFK(6+2*8);
+        
+        matrix<double> estP(6+2*8,6+2*8);
+        int temp = 0 ;
+        
         int numLimit;
-
+        
         while(time<=_simulationTime) {            
-
+            
             update();
-
+            
             //пока только GPS
-            numbersOfVisibleSatellites = spotVisibleSatellites(_consumer->getCurrentState(), 1);
-
-            numLimit = 10;//numbersOfVisibleSatellites.size();
-
+            numbersOfVisibleSatellitesGps =     spotVisibleSatellites(_consumer->getCurrentState(), 1);
+            numbersOfVisibleSatellitesGlonass = spotVisibleSatellites(_consumer->getCurrentState(), 2);
+            
+            //            numLimit = 10;//numbersOfVisibleSatellites.size();
+            
             if (temp%100 == 0){
-            for (int i = 0; i < numLimit; ++i)
-            {
-                 deltaPseudoDistance.push_back(                    
-                    _SSNS[numbersOfVisibleSatellites[i]].computeTrueDistance(
-                        time,
-                        _consumer->getCurrentState(),
-                        _gps->getStateSatellite(numbersOfVisibleSatellites[i]))
-                    -                    
-                    _SSNS[numbersOfVisibleSatellites[i]].computeReferenceDistance(
-                        time,_consumer->getCurrentReferenceState(), _gps->getReferenceStateSatellite(numbersOfVisibleSatellites[i]))
-                    );
-
-                 deltaDerivativePseudoDistance.push_back(                    
-                    _SSNS[numbersOfVisibleSatellites[i]].computeTrueDerivativeDistance(
-                        time,_consumer->getCurrentState(), _gps->getStateSatellite(numbersOfVisibleSatellites[i]))
-                    -                    
-                    _SSNS[numbersOfVisibleSatellites[i]].computeReferenceDerivativeDistance(
-                        time,_consumer->getCurrentReferenceState(), _gps->getReferenceStateSatellite(numbersOfVisibleSatellites[i]))
-                    );
-                 statesSatellites.push_back(_gps->getReferenceStateSatellite(numbersOfVisibleSatellites[i]));
-
-            };
-
-
+                for (int i = 0; i < numGps; ++i)
+                {
+                    deltaPseudoDistance.push_back(                    
+                                _SSNS[numbersOfVisibleSatellitesGps[i]].computeTrueDistance(
+                                time,
+                                _consumer->getCurrentState(),
+                                _gps->getStateSatellite(numbersOfVisibleSatellitesGps[i]))
+                            -                    
+                            _SSNS[numbersOfVisibleSatellitesGps[i]].computeReferenceDistance(
+                                time,_consumer->getCurrentReferenceState(), _gps->getReferenceStateSatellite(numbersOfVisibleSatellitesGps[i]))
+                            );
+                    
+                    deltaDerivativePseudoDistance.push_back(                    
+                                _SSNS[numbersOfVisibleSatellitesGps[i]].computeTrueDerivativeDistance(
+                                time,_consumer->getCurrentState(), _gps->getStateSatellite(numbersOfVisibleSatellitesGps[i]))
+                            -                    
+                            _SSNS[numbersOfVisibleSatellitesGps[i]].computeReferenceDerivativeDistance(
+                                time,_consumer->getCurrentReferenceState(), _gps->getReferenceStateSatellite(numbersOfVisibleSatellitesGps[i]))
+                            );
+                    statesSatellites.push_back(_gps->getReferenceStateSatellite(numbersOfVisibleSatellitesGps[i]));
+                    
+                };
+                
+                
+                for (int i = 0; i < numGlonass; ++i)
+                {
+                    deltaPseudoDistance.push_back(                    
+                            _SSNS[numbersOfVisibleSatellitesGlonass[i]].computeTrueDistance(
+                            time,
+                            _consumer->getCurrentState(),
+                            _gps->getStateSatellite(numbersOfVisibleSatellitesGlonass[i]))
+                            -                    
+                            _SSNS[numbersOfVisibleSatellitesGlonass[i]].computeReferenceDistance(
+                            time,_consumer->getCurrentReferenceState(), _gps->getReferenceStateSatellite(numbersOfVisibleSatellitesGlonass[i]))
+                            );
+                    
+                    deltaDerivativePseudoDistance.push_back(                    
+                            _SSNS[numbersOfVisibleSatellitesGlonass[i]].computeTrueDerivativeDistance(
+                            time,_consumer->getCurrentState(), _gps->getStateSatellite(numbersOfVisibleSatellitesGlonass[i]))
+                            -                    
+                            _SSNS[numbersOfVisibleSatellitesGlonass[i]].computeReferenceDerivativeDistance(
+                            time,_consumer->getCurrentReferenceState(), _gps->getReferenceStateSatellite(numbersOfVisibleSatellitesGlonass[i]))
+                            );
+                    statesSatellites.push_back(_gps->getReferenceStateSatellite(numbersOfVisibleSatellitesGlonass[i]));
+                    
+                };
+                    
+                    
                 _consumer->computeEstimateDeltaState(deltaPseudoDistance,  deltaDerivativePseudoDistance, statesSatellites);
                 temp = 0;
-
+                
                 estP = _consumer->getEstP();
-
+                
                 referenceStateConsumer = _consumer->getCurrentReferenceState();
-                StateConsumer = _consumer->getCurrentState();
-                deltaStateFK = _consumer->getDeltaStateEstimateFK();
-
-                referenceStateConsumer = StateConsumer - referenceStateConsumer;//deltaStateFK;//
-
-                xr.push_back(referenceStateConsumer(0));
-                yr.push_back(referenceStateConsumer(1));
-                zr.push_back(referenceStateConsumer(2));
-                vxr.push_back(referenceStateConsumer(3));
-                vyr.push_back(referenceStateConsumer(4));
-                vzr.push_back(referenceStateConsumer(5));
-
+                StateConsumer = _consumer->getCurrentState();                
+                
+                deltaStateFK = StateConsumer - referenceStateConsumer;
+                
+                xr.push_back(deltaStateFK(0));
+                yr.push_back(deltaStateFK(1));
+                zr.push_back(deltaStateFK(2));
+                vxr.push_back(deltaStateFK(3));
+                vyr.push_back(deltaStateFK(4));
+                vzr.push_back(deltaStateFK(5));
+                
                 xlim.push_back(3*sqrt(estP(0,0)));
                 ylim.push_back(3*sqrt(estP(1,1)));
                 zlim.push_back(3*sqrt(estP(2,2)));
-
+                
                 vxlim.push_back(3*sqrt(estP(3,3)));
                 vylim.push_back(3*sqrt(estP(4,4)));
                 vzlim.push_back(3*sqrt(estP(5,5)));
-
+                
                 xlim2.push_back(-3*sqrt(estP(0,0)));
                 ylim2.push_back(-3*sqrt(estP(1,1)));
                 zlim2.push_back(-3*sqrt(estP(2,2)));
-
+                
                 vxlim2.push_back(-3*sqrt(estP(3,3)));
                 vylim2.push_back(-3*sqrt(estP(4,4)));
                 vzlim2.push_back(-3*sqrt(estP(5,5)));
                 t.push_back(time);
             }
-                temp++;
-//            xr.push_back(referenceStateConsumer(0));
-//            yr.push_back(referenceStateConsumer(1));
-//            zr.push_back(referenceStateConsumer(2));
-//            vxr.push_back(referenceStateConsumer(3));
-//            vyr.push_back(referenceStateConsumer(4));
-//            vzr.push_back(referenceStateConsumer(5));
-
-//            xlim.push_back(3*sqrt(estP(0,0))+StateConsumer(0));
-//            ylim.push_back(3*sqrt(estP(1,1))+StateConsumer(1));
-//            zlim.push_back(3*sqrt(estP(2,2))+StateConsumer(2));
-
-//            vxlim.push_back(3*sqrt(estP(3,3))+StateConsumer(3));
-//            vylim.push_back(3*sqrt(estP(4,4))+StateConsumer(4));
-//            vzlim.push_back(3*sqrt(estP(5,5))+StateConsumer(5));
-
-//            xlim2.push_back(-3*sqrt(estP(0,0))+StateConsumer(0));
-//            ylim2.push_back(-3*sqrt(estP(1,1))+StateConsumer(1));
-//            zlim2.push_back(-3*sqrt(estP(2,2))+StateConsumer(2));
-
-//            vxlim2.push_back(-3*sqrt(estP(3,3))+StateConsumer(3));
-//            vylim2.push_back(-3*sqrt(estP(4,4))+StateConsumer(4));
-//            vzlim2.push_back(-3*sqrt(estP(5,5))+StateConsumer(5));
-         /*   xr.push_back(deltaStateFK(0));
-            yr.push_back(deltaStateFK(1));
-            zr.push_back(deltaStateFK(2));
-            vxr.push_back(deltaStateFK(3));
-            vyr.push_back(deltaStateFK(4));
-            vzr.push_back(deltaStateFK(5));
-
-            xlim.push_back(3*sqrt(estP(0,0)));
-            ylim.push_back(3*sqrt(estP(1,1)));
-            zlim.push_back(3*sqrt(estP(2,2)));
-
-            vxlim.push_back(3*sqrt(estP(3,3)));
-            vylim.push_back(3*sqrt(estP(4,4)));
-            vzlim.push_back(3*sqrt(estP(5,5)));
-
-            xlim2.push_back(-3*sqrt(estP(0,0)));
-            ylim2.push_back(-3*sqrt(estP(1,1)));
-            zlim2.push_back(-3*sqrt(estP(2,2)));
-
-            vxlim2.push_back(-3*sqrt(estP(3,3)));
-            vylim2.push_back(-3*sqrt(estP(4,4)));
-            vzlim2.push_back(-3*sqrt(estP(5,5)));  */
-
-
-
-
+            temp++;
+            
             std::cout << time << std::endl;
             time += _step;
-
-
+            
+            
             deltaPseudoDistance.clear();
             deltaDerivativePseudoDistance.clear();
             statesSatellites.clear();
-
+            
         }
+        
         DrawGraphic drawG;
-
-
-            drawG.drawXY(t,xr, xlim);
-            drawG.drawXY(t,yr, ylim);
-            drawG.drawXY(t,zr, zlim);
-            drawG.drawXY(t,vxr, vxlim);
-            drawG.drawXY(t,vyr, vylim);
-            drawG.drawXY(t,vzr, vzlim);
-//        drawG.drawXY(t,xr, xlim, xlim2);
-//        drawG.drawXY(t,yr, ylim, ylim2);
-//        drawG.drawXY(t,zr, zlim, zlim2);
-//        drawG.drawXY(t,vxr, vxlim, vxlim2);
-//        drawG.drawXY(t,vyr, vylim, vylim2);
-//        drawG.drawXY(t,vzr, vzlim, vzlim2);
-
-        drawG.drawXYZ(xr, yr, zr);
+        drawG.drawXY(t,xr, xlim, xlim2);
+        drawG.drawXY(t,yr, ylim, ylim2);
+        drawG.drawXY(t,zr, zlim, zlim2);
+        drawG.drawXY(t,vxr, vxlim, vxlim2);
+        drawG.drawXY(t,vyr, vylim, vylim2);
+        drawG.drawXY(t,vzr, vzlim, vzlim2);
     }
-
+        
 protected:
     double _simulationTime;
     double _beginTime;

@@ -17,39 +17,39 @@ public:
 		}		
     }
 
-	void InitializeSatellites(float stepIntegration_){
+    void InitializeSatellites(double stepIntegration_){
         WhiteNoiseGenerator whiteNoise(0);
 		std::ifstream F1;
 		std::ifstream F2;
 
-		float sigmaxyz;
-		float sigmaVxyz;
+        double sigmaxyz;
+        double sigmaVxyz;
 		
 		if (_countSatellites == 31)
 		{
-			sigmaxyz = 10/1000.0;
-			sigmaVxyz = 0.1/1000.0;
+            sigmaxyz = 10.0;
+            sigmaVxyz = 0.1;
 			F1.open("src/ephes_gps_1.txt", std::ios::in);
 			F2.open("src/ephes_gps_2.txt", std::ios::in);
 		};
 		if (_countSatellites == 24)
 		{
-			sigmaxyz = 13/1000.0;
-			sigmaVxyz = 0.3/1000.0;
+            sigmaxyz = 13.0;
+            sigmaVxyz = 0.3;
 			F1.open("src/ephes_glonass_1.txt", std::ios::in);
 			F2.open("src/ephes_glonass_2.txt", std::ios::in);
 		};
 		
-		float omegaEarth = 7.2921158553*1e-5; //рад в сек
-		float theta = omegaEarth*6*3600;
+        double omegaEarth = 7.2921158553*1e-5; //рад в сек
+        double theta = omegaEarth*6*3600;
 	
-		vector<float> stateSatellite(6);		
+        vector<double> stateSatellite(6);
 
-		float x1,y1,z1,t1;
-		float x2,y2,z2,t2;
-		float xAbs1,yAbs1,zAbs1;
-		float xAbs2,yAbs2,zAbs2;
-		float vx, vy, vz;
+        double x1,y1,z1,t1;
+        double x2,y2,z2,t2;
+        double xAbs1,yAbs1,zAbs1;
+        double xAbs2,yAbs2,zAbs2;
+        double vx, vy, vz;
 
 		for (int i = 0; i < _countSatellites; ++i)
 		{	
@@ -69,7 +69,7 @@ public:
             F2.eof();
 
 			
-			float dt = 10.0;
+            double dt = 10.0;
 			
 			vx = (x2-x1)/dt;
 			vy = (y2-y1)/dt;
@@ -84,47 +84,47 @@ public:
 			zAbs2 = z2;
 
 
-			stateSatellite(0) = (xAbs1+xAbs2)/2.0;
-			stateSatellite(1) = (yAbs1+yAbs2)/2.0;
-			stateSatellite(2) = (zAbs1+zAbs2)/2.0;			
+            stateSatellite(0) = 1000*((xAbs1+xAbs2)/2.0);
+            stateSatellite(1) = 1000*((yAbs1+yAbs2)/2.0);
+            stateSatellite(2) = 1000*((zAbs1+zAbs2)/2.0);
 
-			stateSatellite(3) = vx*cos(theta)-vy*sin(theta)-omegaEarth*yAbs1;
-			stateSatellite(4) = vx*sin(theta)-vy*cos(theta)+omegaEarth*xAbs1;
-			stateSatellite(5) = vz;
+            stateSatellite(3) = 1000*(vx*cos(theta)-vy*sin(theta)-omegaEarth*yAbs1);
+            stateSatellite(4) = 1000*(vx*sin(theta)-vy*cos(theta)+omegaEarth*xAbs1);
+            stateSatellite(5) = 1000*(vz);
 
 			
             _satellites[i].setReferenceState(stateSatellite);
 
-            stateSatellite(0) += sigmaxyz*whiteNoise.getNoise();
-			stateSatellite(1) += sigmaxyz*whiteNoise.getNoise();
-			stateSatellite(2) += sigmaxyz*whiteNoise.getNoise();			
+//            stateSatellite(0) += sigmaxyz*whiteNoise.getNoise();
+//            stateSatellite(1) += sigmaxyz*whiteNoise.getNoise();
+//            stateSatellite(2) += sigmaxyz*whiteNoise.getNoise();
 
-			stateSatellite(3) += sigmaVxyz*whiteNoise.getNoise();
-			stateSatellite(4) += sigmaVxyz*whiteNoise.getNoise();
-            stateSatellite(5) += sigmaVxyz*whiteNoise.getNoise();
+//            stateSatellite(3) += sigmaVxyz*whiteNoise.getNoise();
+//            stateSatellite(4) += sigmaVxyz*whiteNoise.getNoise();
+//            stateSatellite(5) += sigmaVxyz*whiteNoise.getNoise();
 
-			_satellites[i].setInitializeParametrs(0, stateSatellite); //передавать время
-            _satellites[i].setIntegrationMethod(stepIntegration_, 2); //RungeKutta
+            _satellites[i].setInitializeParametrs(0, stateSatellite); //передавать время
+            _satellites[i].setIntegrationMethod(stepIntegration_, 2);
 		};
     }
 
 	void computeNextState(){
 		for (int i = 0; i < _countSatellites; ++i)
 		{
-			_satellites[i].computeNextReferenceState();
-			_satellites[i].computeNextState();			
+            _satellites[i].computeNextReferenceState();
+            _satellites[i].computeNextState();
 		};
     }
 
-	vector<float> getStateSatellite(int numSatellite){
-		vector<float> stateSatellite(6);
-		stateSatellite = _satellites[numSatellite].getCurrentState();
+    vector<double> getStateSatellite(int numSatellite){
+        vector<double> stateSatellite(6);
+        stateSatellite = _satellites[numSatellite].getCurrentState();
 		return stateSatellite;
     }
 
-	vector<float> getReferenceStateSatellite(int numSatellite){
-		vector<float> stateSatellite(6);
-		stateSatellite = _satellites[numSatellite].getCurrentReferenceState();
+    vector<double> getReferenceStateSatellite(int numSatellite){
+        vector<double> stateSatellite(6);
+        stateSatellite = _satellites[numSatellite].getCurrentReferenceState();
 		return stateSatellite;
     }
 
