@@ -5,6 +5,7 @@
 #include "vector_matrix.h"
 #include <math.h>
 #include "WhiteNoiseGenerator.h"
+#include "Model.h"
 
 
 class SystemSimulateNavigationSignals{
@@ -108,7 +109,7 @@ public:
         double eta = vector<double>(_formingFilterForDerivativeDistance->getNextState())(0);
 
         derivativeDistance = computeDerivativeDistance(time_, stateConsumer_, stateSatellite_);
-        //derivativeDistance += eta + deltaSys;
+        derivativeDistance += eta + deltaSys;
 
         return derivativeDistance;
     }

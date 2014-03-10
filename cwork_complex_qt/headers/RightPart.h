@@ -1,11 +1,11 @@
 #ifndef _RIGHT_PART_
 #define _RIGHT_PART_
 
-
 #include "vector_matrix.h"
 #include <math.h>
 #include "WhiteNoiseGenerator.h"
 
+const int num_comp = 22;
 
 class RightPart{
 public:	
@@ -20,9 +20,8 @@ class RightPartOfSatellite: public RightPart{
 public:	
     vector<double> rightPart(double time_, vector<double> state_){
         double mu = 398600.436e+9;
-        double omegaEarth = 7.2921158553*1e-5;
 
-        vector<double> resultVector(6);
+        vector<double> resultVector(state_.size());
 
         double radius3 = pow(state_(0)*state_(0) + state_(1)*state_(1) + state_(2)*state_(2), 3/2.0);
 		
@@ -30,11 +29,8 @@ public:
 		resultVector(1) = state_(4) ;
 		resultVector(2) = state_(5);
 
-		resultVector(3) = -mu*state_(0)/radius3; // - (- 2*state_(4)*omegaEarth - 
-		                  // omegaEarth*omegaEarth*state_(0));
-		resultVector(4) = -mu*state_(1)/radius3 ;//- 
-		                  // (+ 2*state_(3)*omegaEarth - 
-		                  // omegaEarth*omegaEarth*state_(1));
+        resultVector(3) = -mu*state_(0)/radius3;
+        resultVector(4) = -mu*state_(1)/radius3 ;
 		resultVector(5) = - mu*state_(2)/radius3;
 
 		return resultVector;
@@ -47,23 +43,22 @@ class RightPartOfConsumer: public RightPart{
 public:	
     vector<double> rightPart(double time_, vector<double> state_){
         double mu = 398600.436e+9;
-        double omegaEarth = 7.2921158553*1e-5;
 
-        vector<double> resultVector(6);
+        vector<double> resultVector(state_.size());
 
         double radius3 = pow(state_(0)*state_(0) + state_(1)*state_(1) + state_(2)*state_(2), 3/2.0);
 		
-		resultVector(0) = state_(3) ;
-		resultVector(1) = state_(4) ;
+        for (int i=0; i<state_.size(); i++){
+            resultVector(i) = 0;
+        }
+
+        resultVector(0) = state_(3);
+        resultVector(1) = state_(4);
 		resultVector(2) = state_(5);
 
 		resultVector(3) = -mu*state_(0)/radius3;
-         // -          (- 2*state_(4)*omegaEarth -  omegaEarth*omegaEarth*state_(0));
-		resultVector(4) = -mu*state_(1)/radius3 ;
-		// - 
-		//                   (+ 2*state_(3)*omegaEarth - 
-		//                   omegaEarth*omegaEarth*state_(1));
-		resultVector(5) = - mu*state_(2)/radius3;
+        resultVector(4) = -mu*state_(1)/radius3;
+        resultVector(5) = -mu*state_(2)/radius3;
 
 		return resultVector;
     }

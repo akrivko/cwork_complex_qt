@@ -1,20 +1,20 @@
 #ifndef _SYSTEM_SIMULATION_
 #define _SYSTEM_SIMULATION_
 
-
 #include "vector_matrix.h"
 #include <math.h>
 #include "headers/SystemSimulateNavigationSignals.h"
 #include "headers/Model.h"
 #include "headers/Constellation.h"
 #include "headers/WhiteNoiseGenerator.h"
+#include "DrawGraphics.h"
 
 
 class SystemSimulation{
 public:
-    SystemSimulation(){
+    SystemSimulation(double time_){
         _step = 0.1;
-        _simulationTime = 1000;
+        _simulationTime = time_;
         _beginTime = 0;
 
         _gps = new Constellation(31);
@@ -23,11 +23,10 @@ public:
         _glonass = new Constellation(24);
         _glonass->InitializeSatellites(_step);
 
-
         _consumer = new Consumer;
 
-        vector<double> stateReference(6);
-        vector<double> stateTrue(6);
+        vector<double> stateReference(num_comp);
+        vector<double> stateTrue(num_comp);
 
         stateReference(0) = 6871e3;
         stateReference(1) = 0.0;
@@ -36,16 +35,20 @@ public:
         stateReference(4) = 3811.78;
         stateReference(5) = 6594.11;
 
+        for (int i=6; i<num_comp; ++i){
+            stateReference(i) = 0;
+        }
 
         double sigmaxyz = 100.0;
         double sigmaVxyz = 1.0;
         WhiteNoiseGenerator whiteNoise(0);
-        stateTrue(0) = 6871e3  + sigmaxyz*whiteNoise.getNoise();
-        stateTrue(1) = 0.0 + sigmaxyz*whiteNoise.getNoise();
-        stateTrue(2) = 0.0 + sigmaxyz*whiteNoise.getNoise();
-        stateTrue(3) = 0.0 + sigmaVxyz*whiteNoise.getNoise();
-        stateTrue(4) = 3811.78 + sigmaVxyz*whiteNoise.getNoise();
-        stateTrue(5) = 6594.11 + sigmaVxyz*whiteNoise.getNoise();
+        stateTrue = stateReference;
+        stateTrue(0) += sigmaxyz*whiteNoise.getNoise();
+        stateTrue(1) += sigmaxyz*whiteNoise.getNoise();
+        stateTrue(2) += sigmaxyz*whiteNoise.getNoise();
+        stateTrue(3) += sigmaVxyz*whiteNoise.getNoise();
+        stateTrue(4) += sigmaVxyz*whiteNoise.getNoise();
+        stateTrue(5) += sigmaVxyz*whiteNoise.getNoise();
 
 
         _consumer->setInitializeParametrs(_beginTime, stateTrue);
@@ -127,7 +130,7 @@ public:
         int numGps = 8, numGlonass = 8;
         std::vector<double> deltaPseudoDistance;
         std::vector<double> deltaDerivativePseudoDistance;
-        std::vector< vector<double> > statesSatellites (0, vector<double>(6));
+        std::vector< vector<double> > statesSatellites (0, vector<double>(num_comp));
 
         std::vector<double> t(0);
 
@@ -149,25 +152,24 @@ public:
         std::vector<double> vxlim2(0);
         std::vector<double> vylim2(0);
         std::vector<double> vzlim2(0);
+        std::vector<double> s(0);
+        std::vector<double> slim(0);
+        std::vector<double> slim2(0);
 
-        vector<double> referenceStateConsumer(6);
-        vector<double> StateConsumer(6);
-        vector<double> deltaStateFK(6);
+        vector<double> referenceStateConsumer(num_comp);
+        vector<double> StateConsumer(num_comp);
+        vector<double> deltaState(num_comp);
+        vector<double> fromFK(num_comp);
 
-        matrix<double> estP(6,6);
+        matrix<double> estP(num_comp,num_comp);
         int temp = 0 ;
-
-        int numLimit;
 
         while(time<=_simulationTime) {
 
             update();
 
-            //пока только GPS
             numbersOfVisibleSatellitesGps =     spotVisibleSatellites(_consumer->getCurrentState(), 1);
             numbersOfVisibleSatellitesGlonass = spotVisibleSatellites(_consumer->getCurrentState(), 2);
-
-            //            numLimit = 10;//numbersOfVisibleSatellites.size();
 
             if (temp%100 == 0){
                 for (int i = 0; i < numGps; ++i)
@@ -225,14 +227,16 @@ public:
                 referenceStateConsumer = _consumer->getCurrentReferenceState();
                 StateConsumer = _consumer->getCurrentState();
 
-                deltaStateFK = StateConsumer - referenceStateConsumer;
+                fromFK = _consumer->getDeltaStateEstimateFK();
+                deltaState = StateConsumer - referenceStateConsumer;
 
-                xr.push_back(deltaStateFK(0));
-                yr.push_back(deltaStateFK(1));
-                zr.push_back(deltaStateFK(2));
-                vxr.push_back(deltaStateFK(3));
-                vyr.push_back(deltaStateFK(4));
-                vzr.push_back(deltaStateFK(5));
+                xr.push_back(deltaState(0));
+                yr.push_back(deltaState(1));
+                zr.push_back(deltaState(2));
+                vxr.push_back(deltaState(3));
+                vyr.push_back(deltaState(4));
+                vzr.push_back(deltaState(5));
+                s.push_back(fromFK(6));
 
                 xlim.push_back(3*sqrt(estP(0,0)));
                 ylim.push_back(3*sqrt(estP(1,1)));
@@ -249,13 +253,17 @@ public:
                 vxlim2.push_back(-3*sqrt(estP(3,3)));
                 vylim2.push_back(-3*sqrt(estP(4,4)));
                 vzlim2.push_back(-3*sqrt(estP(5,5)));
+
+                slim.push_back(3*sqrt(estP(6,6)));
+                slim2.push_back(-3*sqrt(estP(6,6)));
+
                 t.push_back(time);
             }
+
             temp++;
 
             std::cout << time << std::endl;
             time += _step;
-
 
             deltaPseudoDistance.clear();
             deltaDerivativePseudoDistance.clear();
@@ -264,9 +272,13 @@ public:
         }
 
         DrawGraphic drawG;
+
         drawG.drawXY(t,xr, xlim, xlim2);
         drawG.drawXY(t,yr, ylim, ylim2);
         drawG.drawXY(t,zr, zlim, zlim2);
+
+        drawG.drawXY(t,s, slim, slim2);
+
         drawG.drawXY(t,vxr, vxlim, vxlim2);
         drawG.drawXY(t,vyr, vylim, vylim2);
         drawG.drawXY(t,vzr, vzlim, vzlim2);

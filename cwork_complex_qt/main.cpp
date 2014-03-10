@@ -3,16 +3,14 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "headers/Model.h"
 #include "headers/vector_matrix.h"
+#include "headers/SystemSimulation.h"
+#include "headers/Model.h"
 #include "headers/DrawGraphics.h"
 #include "headers/Constellation.h"
-
 #include "headers/WhiteNoiseGenerator.h"
 #include "headers/SystemSimulateNavigationSignals.h"
-#include "headers/SystemSimulation.h"
 #include "headers/KalmanFilter.h"
-
 #include <QFile>
 #include <QTextStream>
 
@@ -22,6 +20,9 @@ vector<double> fromKeplerToCartesian(double a, double e, double i, double Omega,
     double mu = 398600.436e+9;
 
     int E = M;
+    /*ToDo
+     *расчет E для M != 0
+     */
 
     vector<double> P(3), Q(3);
 
@@ -38,9 +39,6 @@ vector<double> fromKeplerToCartesian(double a, double e, double i, double Omega,
     R = a*(cos(E)-e)*P + a*sqrt(1-e*e)*sin(E)*Q;
 
     V = 1/(1-e*cos(E))*sqrt(mu/a)*(-e*sin(E)*P+sqrt(1-e*e)*cos(E)*Q);
-
-//            -a*e*sin(E)*sqrt(mu)/(pow(a, 1.5)*(1-e*cos(E)))*P +
-//            a*sqrt(1-e*e)*cos(E)*sqrt(mu)/(pow(a, 1.5)*(1-e*cos(E)))*Q
 
     vector<double> res(6);
     res(0) = R(0);
@@ -59,38 +57,54 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-  /*  vector<double> state(6);
+    std::cout << "Modelling time, c" << std::endl;
+    double time;
+    std::cin >> time;
 
-    state = fromKeplerToCartesian(6371e3+500e3, 0, 3.14/3.0, 0, 0, 0);
+    SystemSimulation* ss;
+    ss = new SystemSimulation(time);
+    ss->simulate();
 
-    std::cout<<state;
+    return a.exec();
+}
+
+/*
 
 */
 
- /*   vector<double> s(3);
-    s(0) = 1;
-    s(1) = 2;
-    s(2) = 3;
 
-    matrix<double> m(3,3), mi(3,3), mii(3,3);
-    m(0,0) = 693; m(0,1) = 357; m(0,2) = 657;
-    m(1,0) = 8; m(1,1) = 1085; m(1,2) = 234;
-    m(2,0) = 19; m(2,1) = 349; m(2,2) = 34;
+/*  vector<double> state(6);
 
-    InvertMatrix(m, mi);
-    InvertMatrix(mi, mii);
-    std::cout<<mi;
-    std::cout<<mii;
-    std::cout<<m-mii;
+  state = fromKeplerToCartesian(6371e3+500e3, 0, 3.14/3.0, 0, 0, 0);
+
+  std::cout<<state;
+
+*/
+
+/*   vector<double> s(3);
+  s(0) = 1;
+  s(1) = 2;
+  s(2) = 3;
+
+  matrix<double> m(3,3), mi(3,3), mii(3,3);
+  m(0,0) = 693; m(0,1) = 357; m(0,2) = 657;
+  m(1,0) = 8; m(1,1) = 1085; m(1,2) = 234;
+  m(2,0) = 19; m(2,1) = 349; m(2,2) = 34;
+
+  InvertMatrix(m, mi);
+  InvertMatrix(mi, mii);
+  std::cout<<mi;
+  std::cout<<mii;
+  std::cout<<m-mii;
 */
 /*    matrix<double> m1(2,2), m2(2,2) ;
-    m1(0,0) = 3; m1(0,1) = 7;
-    m1(1,0) = 8; m1(1,1) = 10;
+  m1(0,0) = 3; m1(0,1) = 7;
+  m1(1,0) = 8; m1(1,1) = 10;
 
-    m2(0,0) = 6; m2(0,1) = 2;
-    m2(1,0) = 0; m2(1,1) = 1;
-    //InvertMatrix(m1, m2);
-    std::cout<<trans(m1);
+  m2(0,0) = 6; m2(0,1) = 2;
+  m2(1,0) = 0; m2(1,1) = 1;
+  //InvertMatrix(m1, m2);
+  std::cout<<trans(m1);
 */
 
 //    std::vector<float> num(0);
@@ -100,15 +114,6 @@ int main(int argc, char *argv[])
 
 //    std::cout<<num[2];
 //    std::cout<<num[1];
-
-
-
-  SystemSimulation* ss;
-
-    ss = new SystemSimulation();
-
-    ss->simulate();
-
 
 
 
@@ -301,8 +306,3 @@ double R;
     drawG.drawXY(t, z);
 
 /**//**/
-
-
-    return a.exec();
-}
-

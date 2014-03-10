@@ -32,13 +32,15 @@ bool InvertMatrix(const ublas::matrix<double>& input, ublas::matrix<double>& inv
 
 
 class KalmanFilter{
-public:
+public:    
+    matrix<double> estP;
+
     KalmanFilter(matrix<double> initP){
         estP = initP;
     }
 
     vector<double> estimateDeltaX(vector<double> deltaX, vector<double> deltaY, matrix<double> F, matrix<double> H, matrix<double> D){
-        estimateP(F,H,D);
+      //  estimateP(F,H,D);
 
         int numSat = H.size1();
         int numComponent = deltaX.size();
@@ -47,13 +49,25 @@ public:
         vector<double> res(numComponent);
         matrix<double> PH(numComponent, numSat);
         matrix<double> PHDinv(numSat, numSat);
+        vector<double> FdeltaX(numComponent);
+        matrix<double> HF(numSat, numComponent);
+        vector<double> HFdeltaX(numSat);
+        vector<double> deltaYHFdeltaX(numSat);
 
         InvertMatrix(D, Dinv);
 
         PH = prod(estP, trans(H));
         PHDinv = prod(PH, Dinv);
 
-        res = prod(PHDinv, deltaY);
+        FdeltaX = prod(F, deltaX);
+        HF = prod(H,F);
+        HFdeltaX = prod(HF, deltaX);
+        deltaYHFdeltaX = deltaY - HFdeltaX;
+
+        res = FdeltaX + prod(PHDinv, deltaYHFdeltaX);
+
+        //res = prod(PHDinv, deltaY);
+
         return res;
     }
 
@@ -61,9 +75,6 @@ public:
         return estP;
     }
 
-
-private:
-    matrix<double> estP;
 
     void estimateP(matrix<double> F, matrix<double> H, matrix<double> D){
         int numSat = H.size1();
@@ -92,9 +103,7 @@ private:
         InvertMatrix(FPFinvHDinvH, P);
         estP = P;
 
-//        for (int i=0; i<numComponent; ++i){
-//            estP(i,i) = estP(i,i) * 1.0;
-//        }
+
     }
 
 };
