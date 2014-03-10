@@ -108,15 +108,23 @@ public:
     Consumer(){
         _rightPart = new RightPartOfConsumer;
 
-        vector<double> deltaX(6);
+        matrix<double> initP(6,6);
+        for (int i = 0; i < 6; ++i){
+            for (int j = 0; j < 6; ++j){
+                initP(i,j) = 0;
+            }
+        }
         for (int i = 0; i < 3; ++i)
         {
-            deltaX(i) = 0;
-            deltaX(i+3) = 0;
+            initP(i,i) = 1e8;
+            initP(i+3,i+3) = 1e5;
         }
+//        for (int i = 6; i < 6+16; ++i)
+//        {
+//            initP(i,i) = 1e3;
+//        }
 
-        _deltaStateEstimateFK = deltaX;
-        kalmanFilter = new KalmanFilter(deltaX);
+        kalmanFilter = new KalmanFilter(initP);
     }
 
 
@@ -144,9 +152,6 @@ public:
         for (int i = 0; i < numSat; ++i)
         {
             deltaY(i) = deltaPseudoDistance[i];
-//            std::cout<<deltaPseudoDistance[i]<<std::endl;
-           // deltaY(i+numSat) = deltaDerivativePseudoDistance[i];
-//            std::cout<<deltaDerivativePseudoDistance[i]<<std::endl;
         }
 
         identity_matrix<double> I(6);
@@ -208,7 +213,7 @@ public:
                                                         deltaY, F,
                                                         H, D);
 
-      // _referenceState = _referenceState + _deltaStateEstimateFK;
+       _referenceState = _referenceState + _deltaStateEstimateFK;
         refEstimate = _referenceState;
     }
 

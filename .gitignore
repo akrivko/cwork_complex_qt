@@ -1,3 +1,6 @@
+build-cwork_complex_qt-Desktop_Qt_5_1_1_MinGW_32bit-Debug/
+
+*.autosave
 #################
 ## Eclipse
 #################
@@ -17,7 +20,7 @@ local.properties
 .loadpath
 
 cwork_complex_qt/boost/
-build-cwork_complex_qt-Desktop_Qt_5_1_1_MinGW_32bit-Debug/
+
 
 # External tool builders
 .externalToolBuilders/

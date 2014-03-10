@@ -33,50 +33,26 @@ bool InvertMatrix(const ublas::matrix<double>& input, ublas::matrix<double>& inv
 
 class KalmanFilter{
 public:
-    KalmanFilter(vector<double> beginDeltaX){
-
-        matrix<double> P(6,6);
-        for (int i = 0; i < 6; ++i){
-            for (int j = 0; j < 6; ++j){
-                P(i,j) = 0;
-            }
-        }
-        for (int i = 0; i < 3; ++i)
-        {
-            P(i,i) = 1e8;
-            P(i+3,i+3) = 1e5;
-        }
-
-        estP = P;
+    KalmanFilter(matrix<double> initP){
+        estP = initP;
     }
-
-
 
     vector<double> estimateDeltaX(vector<double> deltaX, vector<double> deltaY, matrix<double> F, matrix<double> H, matrix<double> D){
         estimateP(F,H,D);
 
         int numSat = H.size1();
+        int numComponent = deltaX.size();
 
         matrix<double> Dinv(numSat, numSat);
-        vector<double> res(6);
-        matrix<double> PH(6, numSat);
+        vector<double> res(numComponent);
+        matrix<double> PH(numComponent, numSat);
         matrix<double> PHDinv(numSat, numSat);
-        vector<double> FdeltaX(6);
-        matrix<double> HF(numSat, 6);
-        vector<double> HFdeltaX(numSat);
-        vector<double> deltaYHFdeltaX(numSat);
-
-        FdeltaX = prod(F, deltaX);
-        HF = prod(H,F);
-        HFdeltaX = prod(HF, deltaX);
-        deltaYHFdeltaX = deltaY - HFdeltaX;
 
         InvertMatrix(D, Dinv);
 
         PH = prod(estP, trans(H));
         PHDinv = prod(PH, Dinv);
 
-        //res = FdeltaX + prod(PHDinv, deltaYHFdeltaX);
         res = prod(PHDinv, deltaY);
         return res;
     }
@@ -87,24 +63,24 @@ public:
 
 
 private:
-    vector<double> estDeltaX;
     matrix<double> estP;
-
 
     void estimateP(matrix<double> F, matrix<double> H, matrix<double> D){
         int numSat = H.size1();
-        for (int i=0; i<6; ++i){
+        int numComponent = F.size1();
+
+        for (int i=0; i<numComponent; ++i){
             std::cout<< estP(i,i)<< std::endl;
         }
 
-        matrix<double> P(6,6);
-        matrix<double> FP(6,6);
-        matrix<double> FPF(6,6);
-        matrix<double> FPFinv(6,6);
+        matrix<double> P(numComponent,numComponent);
+        matrix<double> FP(numComponent,numComponent);
+        matrix<double> FPF(numComponent,numComponent);
+        matrix<double> FPFinv(numComponent,numComponent);
         matrix<double> Dinv(numSat, numSat);
-        matrix<double> HDinv(6, numSat);
-        matrix<double> HDinvH(6,6);
-        matrix<double> FPFinvHDinvH(6,6);
+        matrix<double> HDinv(numComponent, numSat);
+        matrix<double> HDinvH(numComponent,numComponent);
+        matrix<double> FPFinvHDinvH(numComponent,numComponent);
 
         FP = prod(F, estP);
         FPF = prod(FP, trans(F));
@@ -116,10 +92,9 @@ private:
         InvertMatrix(FPFinvHDinvH, P);
         estP = P;
 
-        for (int i=0; i<6; ++i){
-            estP(i,i) = estP(i,i) * 1.0;
-        }
-
+//        for (int i=0; i<numComponent; ++i){
+//            estP(i,i) = estP(i,i) * 1.0;
+//        }
     }
 
 };
