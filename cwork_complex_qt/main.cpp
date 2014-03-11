@@ -65,6 +65,51 @@ int main(int argc, char *argv[])
     ss = new SystemSimulation(time);
     ss->simulate();
 
+
+    //test constellation
+
+
+//    QFile log("log2.dat");
+
+//    if(!log.open(QIODevice::Text | QFile::WriteOnly))
+//    {
+//        return 100;
+//    }
+
+//    QTextStream stream(&log);
+
+//    double step = 1;
+//    Constellation* _gps;
+//    _gps = new Constellation(31);
+//    _gps->InitializeSatellites(step);
+
+//    vector<double> s(6);
+
+
+//    double time = 0;
+//    int i=0;
+
+
+//    while (time<3600*12)
+//    {
+//        s = _gps->getStateSatellite(17) - _gps->getReferenceStateSatellite(17);
+//        if (i%100 == 0){
+//            stream<<QString("%1 %2 %3\n")
+//                    .arg(s(0),0,'g',10)
+//                    .arg(s(3),0,'g',10)
+//                    .arg(time,0,'g',10);
+//            stream.flush();
+//        };
+
+//        _gps->computeNextState();
+
+//        time+=step;
+//        std::cout<<time<<std::endl;
+//        i++;
+//    };
+
+//    log.close();
+
     return a.exec();
 }
 
@@ -118,50 +163,7 @@ int main(int argc, char *argv[])
 
 
 
-//test constellation
-/*
-    double step = 1;
-    Constellation* _gps;
-    _gps = new Constellation(24);
-    _gps->InitializeSatellites(step);
 
-    vector<double> s(6);
-
-    std::vector<double> t(0);
-    std::vector<double> x(0);
-    std::vector<double> y(0);
-    std::vector<double> z(0);
-
-    double time = 0;
-    int i=0;
-
-double R;
-    while (time<3600*12*2)
-    {
-        //for (int j=0; j<31; ++j){
-        s = _gps->getStateSatellite(17);// - _gps->getReferenceStateSatellite(17);
-        if (i%100 == 0){
-            t.push_back(time);
-            R = sqrt(s(0)*s(0)+s(1)*s(1)+s(2)*s(2));
-            x.push_back(R);
-            y.push_back(s(1));
-            z.push_back(s(2));
-
-        };
-        //}
-        //for (int j=0; j<10; ++j){
-        _gps->computeNextState();
-        //}
-        time+=step;
-        i++;
-    };
-
-    DrawGraphic drawG;
-    drawG.drawXY(t, x);
-    drawG.drawXY(t, y);
-    drawG.drawXY(t, z);
-    drawG.drawXYZ(x, y, z);
-//*/
 
 
 

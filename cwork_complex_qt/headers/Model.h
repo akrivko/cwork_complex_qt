@@ -148,6 +148,7 @@ public:
                                    std::vector< vector<double> > statesSatellites){
         double step = 10;
 
+        std::cout<<"/****** "<< _referenceState(6)<<"****/" <<std::endl;
         int numSat = deltaPseudoDistance.size();
         vector<double> deltaY(numSat);
 
@@ -155,7 +156,7 @@ public:
 
         deltaX = _deltaStateEstimateFK;
 
-        for (int i = 0; i < 6; ++i)
+        for (int i = 0; i < num_comp; ++i)
         {
             deltaX(i) = 0;
         }
@@ -234,21 +235,21 @@ public:
         _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(deltaX,
                                                               deltaY, F,
                                                               H, D);
-        deltaX = _deltaStateEstimateFK;
+//        deltaX = _deltaStateEstimateFK;
 
-        for (int i = 0; i < 6; ++i)
-        {
-            deltaX(i) = 0;
-        }
+//        for (int i = 0; i < 6; ++i)
+//        {
+//            deltaX(i) = 0;
+//        }
 
-        for (int i = 0; i < numSat; ++i)
-        {
-            deltaY(i) = deltaPseudoDistance[i]-_deltaStateEstimateFK(i+6);
-        }
+//        for (int i = 0; i < numSat; ++i)
+//        {
+//            deltaY(i) = deltaPseudoDistance[i]-(_referenceState(i+6)+_deltaStateEstimateFK(i+6));
+//        }
 
-        _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(deltaX,
-                                                              deltaY, F,
-                                                              H, D);
+//        _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(deltaX,
+//                                                              deltaY, F,
+//                                                              H, D);
 
 
         _referenceState = _referenceState + _deltaStateEstimateFK;

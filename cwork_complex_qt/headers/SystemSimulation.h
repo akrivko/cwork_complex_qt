@@ -8,6 +8,8 @@
 #include "headers/Constellation.h"
 #include "headers/WhiteNoiseGenerator.h"
 #include "DrawGraphics.h"
+#include "QFile"
+#include "QTextStream"
 
 
 class SystemSimulation{
@@ -132,29 +134,14 @@ public:
         std::vector<double> deltaDerivativePseudoDistance;
         std::vector< vector<double> > statesSatellites (0, vector<double>(num_comp));
 
-        std::vector<double> t(0);
+        QFile log("log.dat");
 
-        std::vector<double> xr(0);
-        std::vector<double> yr(0);
-        std::vector<double> zr(0);
-        std::vector<double> vxr(0);
-        std::vector<double> vyr(0);
-        std::vector<double> vzr(0);
-        std::vector<double> xlim(0);
-        std::vector<double> ylim(0);
-        std::vector<double> zlim(0);
-        std::vector<double> vxlim(0);
-        std::vector<double> vylim(0);
-        std::vector<double> vzlim(0);
-        std::vector<double> xlim2(0);
-        std::vector<double> ylim2(0);
-        std::vector<double> zlim2(0);
-        std::vector<double> vxlim2(0);
-        std::vector<double> vylim2(0);
-        std::vector<double> vzlim2(0);
-        std::vector<double> s(0);
-        std::vector<double> slim(0);
-        std::vector<double> slim2(0);
+        if(!log.open(QIODevice::Text | QFile::WriteOnly))
+        {
+            std::cout << "error_log_file";
+        }
+
+        QTextStream stream(&log);
 
         vector<double> referenceStateConsumer(num_comp);
         vector<double> StateConsumer(num_comp);
@@ -227,37 +214,27 @@ public:
                 referenceStateConsumer = _consumer->getCurrentReferenceState();
                 StateConsumer = _consumer->getCurrentState();
 
-                fromFK = _consumer->getDeltaStateEstimateFK();
+                fromFK = _consumer->getCurrentReferenceState();
                 deltaState = StateConsumer - referenceStateConsumer;
 
-                xr.push_back(deltaState(0));
-                yr.push_back(deltaState(1));
-                zr.push_back(deltaState(2));
-                vxr.push_back(deltaState(3));
-                vyr.push_back(deltaState(4));
-                vzr.push_back(deltaState(5));
-                s.push_back(fromFK(6));
+                stream<<QString("%1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15\n")
+                        .arg(deltaState(0),0,'g',10)
+                        .arg(deltaState(1),0,'g',10)
+                        .arg(deltaState(2),0,'g',10)
+                        .arg(deltaState(3),0,'g',10)
+                        .arg(deltaState(4),0,'g',10)
+                        .arg(deltaState(5),0,'g',10)
+                        .arg(fromFK(6),0,'g',10)
+                        .arg(3*sqrt(estP(0,0)),0,'g',10)
+                        .arg(3*sqrt(estP(1,1)),0,'g',10)
+                        .arg(3*sqrt(estP(2,2)),0,'g',10)
+                        .arg(3*sqrt(estP(3,3)),0,'g',10)
+                        .arg(3*sqrt(estP(4,4)),0,'g',10)
+                        .arg(3*sqrt(estP(5,5)),0,'g',10)
+                        .arg(3*sqrt(estP(6,6)),0,'g',10)
+                        .arg(time,0,'g',10);
+                stream.flush();
 
-                xlim.push_back(3*sqrt(estP(0,0)));
-                ylim.push_back(3*sqrt(estP(1,1)));
-                zlim.push_back(3*sqrt(estP(2,2)));
-
-                vxlim.push_back(3*sqrt(estP(3,3)));
-                vylim.push_back(3*sqrt(estP(4,4)));
-                vzlim.push_back(3*sqrt(estP(5,5)));
-
-                xlim2.push_back(-3*sqrt(estP(0,0)));
-                ylim2.push_back(-3*sqrt(estP(1,1)));
-                zlim2.push_back(-3*sqrt(estP(2,2)));
-
-                vxlim2.push_back(-3*sqrt(estP(3,3)));
-                vylim2.push_back(-3*sqrt(estP(4,4)));
-                vzlim2.push_back(-3*sqrt(estP(5,5)));
-
-                slim.push_back(3*sqrt(estP(6,6)));
-                slim2.push_back(-3*sqrt(estP(6,6)));
-
-                t.push_back(time);
             }
 
             temp++;
@@ -271,17 +248,7 @@ public:
 
         }
 
-        DrawGraphic drawG;
-
-        drawG.drawXY(t,xr, xlim, xlim2);
-        drawG.drawXY(t,yr, ylim, ylim2);
-        drawG.drawXY(t,zr, zlim, zlim2);
-
-        drawG.drawXY(t,s, slim, slim2);
-
-        drawG.drawXY(t,vxr, vxlim, vxlim2);
-        drawG.drawXY(t,vyr, vylim, vylim2);
-        drawG.drawXY(t,vzr, vzlim, vzlim2);
+        log.close();
     }
 
 protected:

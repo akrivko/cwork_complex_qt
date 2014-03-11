@@ -64,9 +64,9 @@ public:
         HFdeltaX = prod(HF, deltaX);
         deltaYHFdeltaX = deltaY - HFdeltaX;
 
-        res = FdeltaX + prod(PHDinv, deltaYHFdeltaX);
+        //res = FdeltaX + prod(PHDinv, deltaYHFdeltaX);
 
-        //res = prod(PHDinv, deltaY);
+        res = prod(PHDinv, deltaY);
 
         return res;
     }
