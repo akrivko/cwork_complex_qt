@@ -122,7 +122,7 @@ public:
         }
         for (int i = 6; i < num_comp; ++i)
         {
-            initP(i,i) = 1e2;
+            initP(i,i) = 1000;
         }
 
         kalmanFilter = new KalmanFilter(initP);
@@ -148,13 +148,13 @@ public:
                                    std::vector< vector<double> > statesSatellites){
         double step = 10;
 
-        std::cout<<"/****** "<< _referenceState(6)<<"****/" <<std::endl;
+        std::cout<<"/****** "<< _referenceState(6)*(10.0*10.0+15.0*15.0+100*100)/(10.0*10.0+15.0*15.0)<<"****/" <<std::endl;
         int numSat = deltaPseudoDistance.size();
         vector<double> deltaY(numSat);
 
         vector<double> deltaX(num_comp);
 
-        deltaX = _deltaStateEstimateFK;
+        //deltaX = _deltaStateEstimateFK;
 
         for (int i = 0; i < num_comp; ++i)
         {
@@ -164,6 +164,7 @@ public:
         for (int i = 0; i < numSat; ++i)
         {
             deltaY(i) = deltaPseudoDistance[i];
+            //std::cout<<"............."<<deltaY(i)<<"..........."<<std::endl;
         }
 
         matrix<double> I(num_comp, num_comp);
@@ -244,16 +245,27 @@ public:
 
 //        for (int i = 0; i < numSat; ++i)
 //        {
-//            deltaY(i) = deltaPseudoDistance[i]-(_referenceState(i+6)+_deltaStateEstimateFK(i+6));
+//            deltaY(i) = deltaPseudoDistance[i]-_deltaStateEstimateFK(i+6);
 //        }
 
 //        _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(deltaX,
 //                                                              deltaY, F,
 //                                                              H, D);
 
+        //_referenceState = _referenceState + _deltaStateEstimateFK;
+        for (int i = 0; i < 6; ++i)
+        {
+            _referenceState(i) = _referenceState(i) + _deltaStateEstimateFK(i);
+        }
 
-        _referenceState = _referenceState + _deltaStateEstimateFK;
+        for (int i = 6; i < num_comp; ++i)
+        {
+            _referenceState(i) = _deltaStateEstimateFK(i);
+        }
+
+
         refEstimate = _referenceState;
+
     }
 
      vector <double> getDeltaStateEstimateFK(){

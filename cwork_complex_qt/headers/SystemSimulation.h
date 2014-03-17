@@ -217,20 +217,14 @@ public:
                 fromFK = _consumer->getCurrentReferenceState();
                 deltaState = StateConsumer - referenceStateConsumer;
 
-                stream<<QString("%1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15\n")
+                stream<<QString("%1 %2 %3 %4 %5 %6 %7 %8 %9\n")
                         .arg(deltaState(0),0,'g',10)
                         .arg(deltaState(1),0,'g',10)
-                        .arg(deltaState(2),0,'g',10)
-                        .arg(deltaState(3),0,'g',10)
-                        .arg(deltaState(4),0,'g',10)
-                        .arg(deltaState(5),0,'g',10)
+                        .arg(deltaState(2),0,'g',10)                        
                         .arg(fromFK(6),0,'g',10)
                         .arg(3*sqrt(estP(0,0)),0,'g',10)
                         .arg(3*sqrt(estP(1,1)),0,'g',10)
-                        .arg(3*sqrt(estP(2,2)),0,'g',10)
-                        .arg(3*sqrt(estP(3,3)),0,'g',10)
-                        .arg(3*sqrt(estP(4,4)),0,'g',10)
-                        .arg(3*sqrt(estP(5,5)),0,'g',10)
+                        .arg(3*sqrt(estP(2,2)),0,'g',10)                        
                         .arg(3*sqrt(estP(6,6)),0,'g',10)
                         .arg(time,0,'g',10);
                 stream.flush();

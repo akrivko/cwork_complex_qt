@@ -80,13 +80,13 @@ public:
         int numSat = H.size1();
         int numComponent = F.size1();
 
-        for (int i=0; i<numComponent; ++i){
-            std::cout<< estP(i,i)<< std::endl;
-        }
+//        for (int i=0; i<numComponent; ++i){
+//            std::cout<< estP(i,i)<< std::endl;
+//        }
 
         matrix<double> P(numComponent,numComponent);
         matrix<double> FP(numComponent,numComponent);
-        matrix<double> FPF(numComponent,numComponent);
+        matrix<double> FPF(numComponent,numComponent);        
         matrix<double> FPFinv(numComponent,numComponent);
         matrix<double> Dinv(numSat, numSat);
         matrix<double> HDinv(numComponent, numSat);
@@ -94,7 +94,7 @@ public:
         matrix<double> FPFinvHDinvH(numComponent,numComponent);
 
         FP = prod(F, estP);
-        FPF = prod(FP, trans(F));
+        FPF = prod(FP, trans(F));        
         InvertMatrix(FPF, FPFinv);
         InvertMatrix(D, Dinv);
         HDinv = prod(trans(H), Dinv);
@@ -102,6 +102,8 @@ public:
         FPFinvHDinvH = FPFinv + HDinvH;
         InvertMatrix(FPFinvHDinvH, P);
         estP = P;
+
+        //estP(6,6) = 900;
 
 
     }
