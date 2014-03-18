@@ -149,6 +149,7 @@ public:
         vector<double> fromFK(num_comp);
 
         matrix<double> estP(num_comp,num_comp);
+        matrix<double> estP2(16,16);
         int temp = 0 ;
 
         while(time<=_simulationTime) {
@@ -206,10 +207,11 @@ public:
 
                 };
 
-                _consumer->computeEstimateDeltaState(deltaPseudoDistance,  deltaDerivativePseudoDistance, statesSatellites);
+                _consumer->computeEstimateDeltaState(deltaPseudoDistance,  deltaDerivativePseudoDistance, statesSatellites, numbersOfVisibleSatellitesGps, numbersOfVisibleSatellitesGlonass);
                 temp = 0;
 
                 estP = _consumer->getEstP();
+                estP2 = _consumer->getEstP2();
 
                 referenceStateConsumer = _consumer->getCurrentReferenceState();
                 StateConsumer = _consumer->getCurrentState();
@@ -217,15 +219,19 @@ public:
                 fromFK = _consumer->getCurrentReferenceState();
                 deltaState = StateConsumer - referenceStateConsumer;
 
-                stream<<QString("%1 %2 %3 %4 %5 %6 %7 %8 %9\n")
+                stream<<QString("%1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13\n")
                         .arg(deltaState(0),0,'g',10)
                         .arg(deltaState(1),0,'g',10)
                         .arg(deltaState(2),0,'g',10)                        
                         .arg(fromFK(6),0,'g',10)
+                        .arg(fromFK(7),0,'g',10)
                         .arg(3*sqrt(estP(0,0)),0,'g',10)
                         .arg(3*sqrt(estP(1,1)),0,'g',10)
                         .arg(3*sqrt(estP(2,2)),0,'g',10)                        
-                        .arg(3*sqrt(estP(6,6)),0,'g',10)
+                        .arg(3*sqrt(estP2(0,0)),0,'g',10)
+                        .arg(3*sqrt(estP2(1,1)),0,'g',10)
+                        .arg(_SSNSGps[numbersOfVisibleSatellitesGps[0]].getDeltaChrIon(),0,'g',10)
+                        .arg(_SSNSGps[numbersOfVisibleSatellitesGps[1]].getDeltaChrIon(),0,'g',10)
                         .arg(time,0,'g',10);
                 stream.flush();
 

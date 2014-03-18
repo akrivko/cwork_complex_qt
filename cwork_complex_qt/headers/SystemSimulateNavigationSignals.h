@@ -28,7 +28,7 @@ public:
         _whiteNoiseForDistance = new WhiteNoiseGenerator(0);
         _whiteNoiseForDerivativeDistance = new WhiteNoiseGenerator(0);
 
-        state(0) = _whiteNoiseForDistance->getNoise();
+        state(0) = 0;_whiteNoiseForDistance->getNoise();
 
         _formingFilterForDistance->setInitializeParametrs(time_, state);
         _formingFilterForDistance->setIntegrationMethod(step_, 2);
@@ -68,7 +68,7 @@ public:
     double computeTrueDistance(double time_, vector<double> stateConsumer_, vector<double> stateSatellite_){
         double distance;
         double eta =  vector<double>(_formingFilterForDistance->getNextState())(0);
-
+//        eta = 15*_whiteNoiseForDistance->getNoise();
         std::cout<<"............."<<_deltaChrIon<<"..........."<<std::endl;
 
         distance = computeDistance(time_, stateConsumer_, stateSatellite_);
@@ -119,6 +119,10 @@ public:
         return derivativeDistance;
     }
 
+
+    double getDeltaChrIon(){
+        return _deltaChrIon;
+    }
 
 protected:
     FormingFilter* _formingFilterForDistance;

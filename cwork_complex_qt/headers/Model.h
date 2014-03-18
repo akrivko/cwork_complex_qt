@@ -109,9 +109,10 @@ public:
     Consumer(){
         _rightPart = new RightPartOfConsumer;
 
-        matrix<double> initP(num_comp,num_comp);
-        for (int i = 0; i < num_comp; ++i){
-            for (int j = 0; j < num_comp; ++j){
+        matrix<double> initP(6,6);
+        matrix<double> initP2(16,16);
+        for (int i = 0; i < 6; ++i){
+            for (int j = 0; j < 6; ++j){
                 initP(i,j) = 0;
             }
         }
@@ -120,20 +121,47 @@ public:
             initP(i,i) = 1e8;
             initP(i+3,i+3) = 1e5;
         }
-        for (int i = 6; i < num_comp; ++i)
-        {
-            initP(i,i) = 1000;
-        }
-
         kalmanFilter = new KalmanFilter(initP);
 
-        vector<double> initDeltaX(num_comp);
-        for (int i = 0; i < num_comp; ++i)
+
+        for (int i = 0; i < 16; ++i){
+            for (int j = 0; j < 16; ++j){
+                initP2(i,j) = 0;
+            }
+        }
+        for (int i = 0; i < 16; ++i)
+        {
+            initP2(i,i) = 900;
+        }
+        kalmanFilter2 = new KalmanFilter2(initP2);
+
+
+        P = 900;
+        s = 0;
+
+        vector<double> initX(16);
+        for (int i = 0; i < 16; ++i)
+        {
+            initX(i) = 0;
+        }
+        sigma = initX;
+
+        vector<double> initDeltaX(6);
+        for (int i = 0; i < 6; ++i)
         {
             initDeltaX(i) = 0;
         }
 
         _deltaStateEstimateFK = initDeltaX;
+
+
+
+        vector<int> numbers(16);
+        for (int i = 0; i < 16; ++i)
+        {
+            numbers[i] = -1;
+        }
+        numbersOfVisibleSatellite = numbers;
     }
 
 
@@ -144,19 +172,19 @@ public:
 
 
     void computeEstimateDeltaState(std::vector<double> deltaPseudoDistance,
-                                   std::vector<double> deltaDerivativePseudoDistance,
-                                   std::vector< vector<double> > statesSatellites){
+                                   std::vector<double> PseudoDistance,
+                                   std::vector< vector<double> > statesSatellites,
+                                   std::vector<int> numbersGps,
+                                   std::vector<int> numbersGlonass){
         double step = 10;
 
-        std::cout<<"/****** "<< _referenceState(6)*(10.0*10.0+15.0*15.0+100*100)/(10.0*10.0+15.0*15.0)<<"****/" <<std::endl;
+        //std::cout<<"/****** "<< _referenceState(6)*(10.0*10.0+15.0*15.0+100*100)/(10.0*10.0+15.0*15.0)<<"****/" <<std::endl;
         int numSat = deltaPseudoDistance.size();
         vector<double> deltaY(numSat);
 
-        vector<double> deltaX(num_comp);
+        vector<double> deltaX(6);
 
-        //deltaX = _deltaStateEstimateFK;
-
-        for (int i = 0; i < num_comp; ++i)
+        for (int i = 0; i < 6; ++i)
         {
             deltaX(i) = 0;
         }
@@ -167,17 +195,17 @@ public:
             //std::cout<<"............."<<deltaY(i)<<"..........."<<std::endl;
         }
 
-        matrix<double> I(num_comp, num_comp);
-        for (int i = 0; i < num_comp; ++i){
-            for (int j = 0; j < num_comp; ++j){
+        matrix<double> I(6, 6);
+        for (int i = 0; i < 6; ++i){
+            for (int j = 0; j < 6; ++j){
                 I(i,j) = 0;
             }
         }
-        for (int i = 0; i < num_comp; ++i){
+        for (int i = 0; i < 6; ++i){
             I(i,i) = 1;
         }
 
-        matrix<double> F(num_comp,num_comp);
+        matrix<double> F(6,6);
         F = I + step*A(refEstimate);
 
         double xSat, ySat, zSat, vxSat, vySat, vzSat;
@@ -192,7 +220,7 @@ public:
 
         double radius;
 
-        matrix<double> H(numSat,num_comp);
+        matrix<double> H(numSat,6);
         for (int i = 0; i < numSat; ++i)
         {
             xSat =  vector<double>(statesSatellites[i])(0);
@@ -211,12 +239,6 @@ public:
             H(i,3) = 0;
             H(i,4) = 0;
             H(i,5) = 0;
-
-            for (int j = 6; j < num_comp; ++j)
-            {
-                H(i,j) = 0;
-            }
-            H(i, i+6) = 1;
         }
 
         matrix<double> D(numSat, numSat);
@@ -236,32 +258,143 @@ public:
         _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(deltaX,
                                                               deltaY, F,
                                                               H, D);
-//        deltaX = _deltaStateEstimateFK;
+
 
 //        for (int i = 0; i < 6; ++i)
 //        {
-//            deltaX(i) = 0;
+//            _referenceState(i) = _referenceState(i) + _deltaStateEstimateFK(i);
 //        }
 
-//        for (int i = 0; i < numSat; ++i)
-//        {
-//            deltaY(i) = deltaPseudoDistance[i]-_deltaStateEstimateFK(i+6);
+
+        ////////////////////////////////
+
+        for (int i = 0; i < 8; ++i)
+        {
+            if (numbersOfVisibleSatellite[i] != numbersGps[i]){
+                numbersOfVisibleSatellite[i] = numbersGps[i];
+                kalmanFilter2->setPmax(i, 900);
+                sigma(i) = 0;
+            }
+        }
+        for (int i = 0; i < 8; ++i)
+        {
+            if (numbersOfVisibleSatellite[i+8] != numbersGlonass[i]){
+                numbersOfVisibleSatellite[i+8] = numbersGlonass[i];
+                kalmanFilter2->setPmax(i+8, 900);
+                sigma(i+8) = 0;
+            }
+        }
+
+                vector<double> deltaY2(numSat);
+
+                vector<double> deltaX2(16);
+
+                for (int i = 0; i < 16; ++i)
+                {
+                    deltaX2(i) = 0;
+                }
+
+                for (int i = 0; i < numSat; ++i)
+                {
+                    deltaY2(i) = deltaPseudoDistance[i];
+
+                }
+
+                matrix<double> I2(16, 16);
+                for (int i = 0; i < 16; ++i){
+                    for (int j = 0; j < 16; ++j){
+                        I2(i,j) = 0;
+                    }
+                }
+                for (int i = 0; i < 16; ++i){
+                    I2(i,i) = 1;
+                }
+
+                matrix<double> F2(16,16);
+                F2 = I2;
+
+
+                matrix<double> H2(numSat,16);
+                for (int i = 0; i < numSat; ++i)
+                {
+                    for (int j = 0; j < 16; ++j)
+                    {
+                        H2(i,j) = 0;
+                    }
+                }
+                for (int i = 0; i < numSat; ++i)
+                {
+                    H2(i,i) = 1;
+                }
+
+                matrix<double> D2(numSat, numSat);
+                for (int i = 0; i < numSat; ++i)
+                {
+                    for (int j = 0; j < numSat; ++j)
+                        {
+                            D2(i,j) = 0;
+                        }
+                }
+                for (int i = 0; i < numSat; ++i)
+                {
+                    D2(i,i) = (10.0*10.0+15.0*15.0+100*100);
+                }
+
+
+                kalmanFilter2->estimateP(F2, H2, D2);
+                sigma =  kalmanFilter2->estimateDeltaX(sigma,
+                                                       deltaY2, F2,
+                                                       H2, D2);
+
+                for (int i = 0; i < 16; ++i)
+                {
+                    _referenceState(6+i) = /*_referenceState(6+i) + */sigma(i);
+                }
+
+        ////////////////////////////////
+
+
+
+//        double d = (10.0*10.0+15.0*15.0+100*100);
+//        P = 1/(1/P+16/d);
+
+//        double sumDeltaY = 0;
+//        for (int i=0; i<16; ++i){
+//            sumDeltaY += deltaPseudoDistance[i];
 //        }
 
-//        _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(deltaX,
-//                                                              deltaY, F,
-//                                                              H, D);
+//        s = s+ P * 1 / d * sumDeltaY;
 
-        //_referenceState = _referenceState + _deltaStateEstimateFK;
+
+        std::cout<<std::endl<<"/****** "<< _referenceState(6)<<"****/" <<std::endl;
+        std::cout<<"/****** "<< _referenceState(7)<<"****/" <<std::endl;
+        std::cout<<"/****** "<< _referenceState(8)<<"****/" <<std::endl;
+
+
+        for (int i = 0; i < numSat; ++i)
+        {
+            deltaY(i) = deltaPseudoDistance[i] - sigma(i);
+            //std::cout<<"............."<<deltaY(i)<<"..........."<<std::endl;
+        }
+
+
+        for (int i = 0; i < numSat; ++i)
+        {
+            D(i,i) = (15.0*15.0+100*100);
+        }
+
+        _deltaStateEstimateFK =  kalmanFilter->estimateDeltaX(deltaX,
+                                                              deltaY, F,
+                                                              H, D);
+
+
         for (int i = 0; i < 6; ++i)
         {
             _referenceState(i) = _referenceState(i) + _deltaStateEstimateFK(i);
         }
 
-        for (int i = 6; i < num_comp; ++i)
-        {
-            _referenceState(i) = _deltaStateEstimateFK(i);
-        }
+
+
 
 
         refEstimate = _referenceState;
@@ -275,26 +408,29 @@ public:
      matrix<double> getEstP(){
          return kalmanFilter->getEstP();
      }
+     matrix<double> getEstP2(){
+         return kalmanFilter2->getEstP();
+     }
 
 
 private:
     KalmanFilter* kalmanFilter;
+    KalmanFilter2* kalmanFilter2;
     vector<double> _deltaStateEstimateFK;
     vector<float> refEstimate;
+    double P,s;
+    vector<double> sigma;
+    vector<int> numbersOfVisibleSatellite;
 
     matrix<double> A(vector<double> state_){
         double mu = 398600.436e+9;
-        matrix<double> A(num_comp,num_comp);
+        matrix<double> A(6,6);
         double x = state_(0);
         double y = state_(1);
         double z = state_(2);
         double r = pow(x*x+y*y+z*z, 1/2.0);
 
-        for (int i=0; i<num_comp; ++i){
-            for (int j=0; j<num_comp; ++j){
-                A(i,j) = 0;
-            }
-        }
+
 
         A(0,0) = 0; A(0,1) = 0; A(0,2) = 0; A(0,3) = 1; A(0,4) = 0; A(0,5) = 0;
 
